@@ -6,6 +6,7 @@ run: alexnet_train.py
 git-add:
 	git add -A
 	git commit -m"editing"
+	git push
 
 git-fetch:
 	git fetch
