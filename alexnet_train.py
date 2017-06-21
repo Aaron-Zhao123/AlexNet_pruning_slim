@@ -18,6 +18,7 @@ import tensorflow as tf
 
 import alexnet_model
 from imagenet_data import ImagenetData
+import image_processing
 
 
 
