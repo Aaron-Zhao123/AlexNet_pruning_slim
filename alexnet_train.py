@@ -46,20 +46,6 @@ tf.app.flags.DEFINE_string('restore', False,
 
 
 def _tower_loss(images, labels, num_classes, scope, reuse_variables=None):
-"""Calculate the total loss on a single tower running the ImageNet model.
-We perform 'batch splitting'. This means that we cut up a batch across
-multiple GPUs. For instance, if the batch size = 32 and num_gpus = 2,
-then each tower will operate on an batch of 16 images.
-Args:
-  images: Images. 4D tensor of size [batch_size, FLAGS.image_size,
-                                     FLAGS.image_size, 3].
-  labels: 1-D integer Tensor of [batch_size].
-  num_classes: number of classes
-  scope: unique prefix string identifying the ImageNet tower, e.g.
-    'tower_0'.
-Returns:
-   Tensor of shape [] containing the total loss for a batch of data
-"""
   # Build inference Graph.
   with tf.variable_scope(tf.get_variable_scope(), reuse=reuse_variables):
     model = alexnet_model.alexnet(FLAGS.restore)
