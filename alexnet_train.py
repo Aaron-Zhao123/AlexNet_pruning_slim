@@ -22,6 +22,7 @@ import image_processing
 
 
 
+FLAGS = tf.app.flags.FLAGS
 
 tf.app.flags.DEFINE_string('train_dir', '/tmp/imagenet_train',
                            """Directory where to write event logs """
@@ -50,8 +51,6 @@ tf.app.flags.DEFINE_integer('batch_size', 128,
 
 tf.app.flags.DEFINE_integer('num_preprocess_threads', 4,
                            """batch size""")
-FLAGS = tf.app.flags.FLAGS
-
 
 # **IMPORTANT**
 # Please note that this learning rate schedule is heavily dependent on the
