@@ -241,7 +241,7 @@ def train(dataset):
         checkpoint_path = os.path.join(FLAGS.train_dir, 'model.ckpt')
         saver.save(sess, checkpoint_path, global_step=step)
 
-def main():
+def main(_):
   dataset = ImagenetData(subset=FLAGS.subset)
   assert dataset.data_files()
 
