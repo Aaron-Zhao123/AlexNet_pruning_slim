@@ -45,6 +45,8 @@ class alexnet(object):
         in collections
         """
         tf.add_to_collection('losses', cross_entropy_mean)
+        return tf.add_n(tf.get_collection('losses'), name='total_loss')
+
 
 
     def error_rates(self,topk = 1):
