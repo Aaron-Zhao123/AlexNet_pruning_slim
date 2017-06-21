@@ -210,7 +210,7 @@ def train(dataset):
     # global statistics. This is more complicated then need be but we employ
     # this for backward-compatibility with our previous models.
     variable_averages = tf.train.ExponentialMovingAverage(
-        inception.MOVING_AVERAGE_DECAY, global_step)
+        0.9999, global_step)
 
     # Another possibility is to use tf.slim.get_variables().
     variables_to_average = (tf.trainable_variables() +
