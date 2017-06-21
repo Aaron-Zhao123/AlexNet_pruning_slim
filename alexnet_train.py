@@ -179,23 +179,24 @@ def train(dataset):
     # Calculate the gradients for each model tower.
     tower_grads = []
     reuse_variables = None
-    for i in range(FLAGS.num_gpus):
-      with tf.device('/gpu:%d' % i):
-        with tf.name_scope('gpu_%d' % i) as scope:
-          # Force all Variables to reside on the CPU.
-          with tf.Graph().as_default(), tf.device('/cpu:0'):
-            # Calculate the loss for one tower of the ImageNet model. This
-            # function constructs the entire ImageNet model but shares the
-            # variables across all towers.
-            loss = _tower_loss(images_splits[i], labels_splits[i], num_classes,
-                               scope, reuse_variables)
-          # Reuse variables for the next tower.
-          reuse_variables = True
-          # Calculate the gradients for the batch of data on this ImageNet
-          # tower.
-          grads = opt.compute_gradients(loss)
-          # Keep track of the gradients across all towers.
-          tower_grads.append(grads)
+    with tf.variable_scope(tf.get_variable_scope()):
+      for i in range(FLAGS.num_gpus):
+        with tf.device('/gpu:%d' % i):
+          with tf.name_scope('gpu_%d' % i) as scope:
+            # Force all Variables to reside on the CPU.
+            with tf.Graph().as_default(), tf.device('/cpu:0'):
+              # Calculate the loss for one tower of the ImageNet model. This
+              # function constructs the entire ImageNet model but shares the
+              # variables across all towers.
+              loss = _tower_loss(images_splits[i], labels_splits[i], num_classes,
+                                 scope, reuse_variables)
+            # Reuse variables for the next tower.
+            reuse_variables = True
+            # Calculate the gradients for the batch of data on this ImageNet
+            # tower.
+            grads = opt.compute_gradients(loss)
+            # Keep track of the gradients across all towers.
+            tower_grads.append(grads)
 
     # We must calculate the mean of each gradient. Note that this is the
     # synchronization point across all towers.
