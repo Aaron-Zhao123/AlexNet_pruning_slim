@@ -71,12 +71,12 @@ def _tower_loss(images, labels, num_classes, scope, reuse_variables=None):
   # Build inference Graph.
   with tf.variable_scope(tf.get_variable_scope(), reuse=reuse_variables):
     model = alexnet_model.alexnet(FLAGS.restore)
-    logits = alexnet_model.inference(images, for_training=True)
+    logits = model.inference(images, for_training=True)
 
   # Build the portion of the Graph calculating the losses. Note that we will
   # assemble the total_loss using a custom function below.
   split_batch_size = images.get_shape().as_list()[0]
-  alexnet_model.loss(logits, labels, batch_size=split_batch_size)
+  model.loss(logits, labels, batch_size=split_batch_size)
 
   # Assemble all of the losses for the current tower only.
   losses = tf.get_collection('losses', scope)
