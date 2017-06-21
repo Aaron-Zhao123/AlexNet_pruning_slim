@@ -48,6 +48,9 @@ tf.app.flags.DEFINE_string('restore', False,
 tf.app.flags.DEFINE_integer('batch_size', 128,
                            """batch size""")
 
+tf.app.flags.DEFINE_integer('num_preprocess_threads', 4,
+                           """batch size""")
+
 # **IMPORTANT**
 # Please note that this learning rate schedule is heavily dependent on the
 # hardware architecture, batch size and any changes to the model architecture
