@@ -183,8 +183,7 @@ def train(dataset):
       with tf.device('/gpu:%d' % i):
         with tf.name_scope('gpu_%d' % i) as scope:
           # Force all Variables to reside on the CPU.
-          print(slim.variables.variable)
-          with slim.arg_scope([slim.variables.variable], device='/cpu:0'):
+          with tf.Graph().as_default(), tf.device('/cpu:0'):
             # Calculate the loss for one tower of the ImageNet model. This
             # function constructs the entire ImageNet model but shares the
             # variables across all towers.
@@ -235,9 +234,7 @@ def train(dataset):
 
     if FLAGS.pretrained_model_checkpoint_path and FLAGS.restore:
       assert tf.gfile.Exists(FLAGS.pretrained_model_checkpoint_path)
-      variables_to_restore = tf.get_collection(
-          slim.variables.VARIABLES_TO_RESTORE)
-      restorer = tf.train.Saver(variables_to_restore)
+      restorer = tf.train.Saver()
       restorer.restore(sess, FLAGS.pretrained_model_checkpoint_path)
       print('%s: Pre-trained model restored from %s' %
             (datetime.now(), FLAGS.pretrained_model_checkpoint_path))
