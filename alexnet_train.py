@@ -184,12 +184,12 @@ def train(dataset):
         with tf.device('/gpu:%d' % i):
           with tf.name_scope('gpu_%d' % i) as scope:
             # Force all Variables to reside on the CPU.
-            with tf.Graph().as_default(), tf.device('/cpu:0'):
+            # with tf.Graph().as_default(), tf.device('/cpu:0'):
               # Calculate the loss for one tower of the ImageNet model. This
               # function constructs the entire ImageNet model but shares the
               # variables across all towers.
-              loss = _tower_loss(images_splits[i], labels_splits[i], num_classes,
-                                 scope, reuse_variables)
+            loss = _tower_loss(images_splits[i], labels_splits[i], num_classes,
+                               scope, reuse_variables)
             # Reuse variables for the next tower.
             reuse_variables = True
             # Calculate the gradients for the batch of data on this ImageNet
