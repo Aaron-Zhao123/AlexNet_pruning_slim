@@ -46,8 +46,8 @@ tf.app.flags.DEFINE_string('restore', False,
                            """If specified, restore the pretrained model """)
 
 
-tf.app.flags.DEFINE_integer('batch_size', 128,
-                           """batch size""")
+# tf.app.flags.DEFINE_integer('batch_size', 128,
+#                            """batch size""")
 
 tf.app.flags.DEFINE_integer('num_preprocess_threads', 4,
                            """batch size""")
