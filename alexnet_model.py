@@ -37,7 +37,7 @@ class alexnet(object):
         """for constructing the graph"""
         labels = tf.cast(labels, tf.int64)
         cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(
-            logits, labels, name = 'cross_entropy_batchwise')
+            logits=logits, labels=labels, name = 'cross_entropy_batchwise')
         cross_entropy_mean = tf.reduce_mean(cross_entropy, name = 'cross_entropy')
         """
         puts cross entropy as a loss into collection
