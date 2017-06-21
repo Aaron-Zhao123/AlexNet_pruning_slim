@@ -27,6 +27,10 @@ class alexnet(object):
         self.images = images
         self.conv_network()
         self.isTrain = isTrain
+        if (isTrain):
+            self.keep_prob = 0.5
+        else:
+            self.keep_prob = 1.
         return self.pred
 
     def loss(self, logits, labels, batch_size):
