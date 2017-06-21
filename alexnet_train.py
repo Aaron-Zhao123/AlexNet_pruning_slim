@@ -45,6 +45,10 @@ tf.app.flags.DEFINE_string('restore', False,
                            """If specified, restore the pretrained model """)
 
 
+tf.app.flags.DEFINE_string('batch_size', 128,
+                           """batch size""")
+
+
 def _tower_loss(images, labels, num_classes, scope, reuse_variables=None):
   # Build inference Graph.
   with tf.variable_scope(tf.get_variable_scope(), reuse=reuse_variables):
