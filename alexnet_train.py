@@ -275,7 +275,7 @@ def train(dataset):
       duration = time.time() - start_time
 
       # check each loss
-      for item in range(len(grads_val)):
+      for item in grads_val:
         val = item[0]
         print("checking per tower grads")
         print(np.any(np.isnan(val)))
