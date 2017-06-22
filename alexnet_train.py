@@ -275,8 +275,11 @@ def train(dataset):
       duration = time.time() - start_time
 
       # check each loss
+      for item in range(len(grads_val)):
+        val = item[0]
+        print("checking per tower grads")
+        print(np.any(np.isnan(val)))
 
-      print(loss_value)
       assert not np.isnan(loss_value), 'Model diverged with loss = NaN'
 
       if step % 10 == 0:
