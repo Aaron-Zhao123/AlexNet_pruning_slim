@@ -258,7 +258,7 @@ def train(dataset):
 
       # check each loss
       for i in range(len(tower_losses)):
-        tower_loss, towerlogit = sess.run([tower_losses[i], tower_logits[i]])
+        tower_loss, tower_logit = sess.run([tower_losses[i], tower_logits[i]])
         print(tower_loss)
         print(tower_logit)
       print(loss_value)
