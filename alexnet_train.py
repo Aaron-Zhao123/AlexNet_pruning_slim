@@ -253,14 +253,16 @@ def train(dataset):
 
     for step in range(FLAGS.max_steps):
       start_time = time.time()
+      for i in range(len(tower_losses)):
+        tower_loss, tower_logit = sess.run([tower_losses[i], tower_logits[i]])
+        print(tower_loss)
+        print(np.any(np.isnan(tower_logit)))
+
       _, loss_value, grads_val = sess.run([train_op, loss, grads])
       duration = time.time() - start_time
 
       # check each loss
-      for i in range(len(tower_losses)):
-        tower_loss, tower_logit = sess.run([tower_losses[i], tower_logits[i]])
-        print(tower_loss)
-        print(tower_logit)
+
       print(loss_value)
       assert not np.isnan(loss_value), 'Model diverged with loss = NaN'
 
