@@ -178,6 +178,7 @@ def train(dataset):
 
     # Calculate the gradients for each model tower.
     tower_grads = []
+    tower_losses = []
     reuse_variables = None
     with tf.variable_scope(tf.get_variable_scope()):
       for i in range(FLAGS.num_gpus):
@@ -202,7 +203,7 @@ def train(dataset):
             clipped_grads = [(ClipIfNotNone(grad), var) for grad, var in grads]
             # Keep track of the gradients across all towers.
             tower_grads.append(grads)
-
+            tower_losses.append(loss)
     # We must calculate the mean of each gradient. Note that this is the
     # synchronization point across all towers.
     grads = _average_gradients(tower_grads)
@@ -253,7 +254,10 @@ def train(dataset):
       _, loss_value, grads_val = sess.run([train_op, loss, grads])
       duration = time.time() - start_time
 
-      assert not np.any(np.nan(grads_val))
+      # check each loss
+      for item in tower_losses:
+        tower_loss = sess.run(item)
+        print(tower_loss)
       print(loss_value)
       assert not np.isnan(loss_value), 'Model diverged with loss = NaN'
 
