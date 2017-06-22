@@ -180,6 +180,9 @@ def train(dataset):
     tower_grads = []
     tower_losses = []
     tower_logits = []
+    tower_inputs = []
+    tower_outputs = []
+
     reuse_variables = None
     with tf.variable_scope(tf.get_variable_scope()):
       for i in range(FLAGS.num_gpus):
@@ -206,6 +209,8 @@ def train(dataset):
             tower_grads.append(grads)
             tower_losses.append(loss)
             tower_logits.append(logits)
+            tower_inputs.append(images_splits[i])
+            tower_outputs.append(labels_splits[i])
     # We must calculate the mean of each gradient. Note that this is the
     # synchronization point across all towers.
     grads = _average_gradients(tower_grads)
@@ -254,9 +259,17 @@ def train(dataset):
     for step in range(FLAGS.max_steps):
       start_time = time.time()
       for i in range(len(tower_losses)):
-        tower_loss, tower_logit = sess.run([tower_losses[i], tower_logits[i]])
+        tower_loss, tower_logit, tower_input, tower_output = sess.run([tower_losses[i], tower_logits[i],
+          tower_inputs[i],
+          tower_outputs[i]])
+        print("checking per twoer loss")
         print(tower_loss)
+        print("checking per twoer logits")
         print(np.any(np.isnan(tower_logit)))
+        print("checking per twoer inputs")
+        print(np.any(np.isnan(tower_input)))
+        print("checking per twoer outputs")
+        print(np.any(np.isnan(tower_output)))
 
       _, loss_value, grads_val = sess.run([train_op, loss, grads])
       duration = time.time() - start_time
