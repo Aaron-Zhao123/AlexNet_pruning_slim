@@ -184,7 +184,6 @@ def train(dataset):
         with tf.device('/gpu:%d' % i):
           with tf.name_scope('gpu_%d' % i) as scope:
             # Force all Variables to reside on the CPU.
-            # with tf.Graph().as_default(), tf.device('/cpu:0'):
               # Calculate the loss for one tower of the ImageNet model. This
               # function constructs the entire ImageNet model but shares the
               # variables across all towers.
@@ -248,6 +247,7 @@ def train(dataset):
       _, loss_value = sess.run([train_op, loss])
       duration = time.time() - start_time
 
+      print(loss_value)
       assert not np.isnan(loss_value), 'Model diverged with loss = NaN'
 
       if step % 10 == 0:
