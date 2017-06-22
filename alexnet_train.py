@@ -253,7 +253,7 @@ def train(dataset):
       _, loss_value, grads_val = sess.run([train_op, loss, grads])
       duration = time.time() - start_time
 
-      assert not np.any(np.nan(grads))
+      assert not np.any(np.nan(grads_val))
       print(loss_value)
       assert not np.isnan(loss_value), 'Model diverged with loss = NaN'
 
