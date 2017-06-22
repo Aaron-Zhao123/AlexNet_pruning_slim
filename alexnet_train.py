@@ -91,7 +91,7 @@ def _tower_loss(images, labels, num_classes, scope, reuse_variables=None):
 
   # with tf.control_dependencies([loss_averages_op]):
   #   total_loss = tf.identity(total_loss)
-  return total_loss
+  return (total_loss, logits)
 
 def _average_gradients(tower_grads):
   """Calculate the average gradient for each shared variable across all towers.
@@ -179,6 +179,7 @@ def train(dataset):
     # Calculate the gradients for each model tower.
     tower_grads = []
     tower_losses = []
+    tower_logits = []
     reuse_variables = None
     with tf.variable_scope(tf.get_variable_scope()):
       for i in range(FLAGS.num_gpus):
@@ -188,7 +189,7 @@ def train(dataset):
               # Calculate the loss for one tower of the ImageNet model. This
               # function constructs the entire ImageNet model but shares the
               # variables across all towers.
-            loss = _tower_loss(images_splits[i], labels_splits[i], num_classes,
+            (loss,logits) = _tower_loss(images_splits[i], labels_splits[i], num_classes,
                                scope, reuse_variables)
             # Reuse variables for the next tower.
             reuse_variables = True
@@ -204,6 +205,7 @@ def train(dataset):
             # Keep track of the gradients across all towers.
             tower_grads.append(grads)
             tower_losses.append(loss)
+            tower_logits.append(logits)
     # We must calculate the mean of each gradient. Note that this is the
     # synchronization point across all towers.
     grads = _average_gradients(tower_grads)
@@ -255,9 +257,10 @@ def train(dataset):
       duration = time.time() - start_time
 
       # check each loss
-      for item in tower_losses:
-        tower_loss = sess.run(item)
+      for i in range(len(tower_losses)):
+        tower_loss, towerlogit = sess.run([tower_losses[i], tower_logits[i]])
         print(tower_loss)
+        print(tower_logit)
       print(loss_value)
       assert not np.isnan(loss_value), 'Model diverged with loss = NaN'
 
