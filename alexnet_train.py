@@ -194,6 +194,12 @@ def train(dataset):
             # Calculate the gradients for the batch of data on this ImageNet
             # tower.
             grads = opt.compute_gradients(loss)
+            """gradient clipping"""
+            def ClipIfNotNone(grad):
+                if grad is None:
+                    return grad
+                return tf.clip_by_value(grad, -1, 1)
+            clipped_grads = [(ClipIfNotNone(grad), var) for grad, var in grads]
             # Keep track of the gradients across all towers.
             tower_grads.append(grads)
 
